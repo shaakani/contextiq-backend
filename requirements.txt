@@ -1,0 +1,5 @@
+#KEEPING TRACK OF DEPENDENCIES
+
+fastapi
+uvicorn
+faker
