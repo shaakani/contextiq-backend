@@ -2,6 +2,7 @@
 
 from fastapi import FastAPI
 from synthetic_data import generate_synthetic_messages
+from github_issues import generate_synthetic_issues
 
 app = FastAPI(title="ContextIQ Backend API")
 
@@ -29,3 +30,13 @@ def get_synthetic_messages(count: int = 10):
     """
     messages = generate_synthetic_messages(num_messages=count)
     return {"messages": messages}
+
+@app.get("/synthetic/github-issues")
+def get_github_issues(count: int = 5):
+    """
+    Generate and return synthetic GitHub issues.
+
+    Query parameter:
+    - count: number of issues to generate (default 5)
+    """
+    return {"issues": generate_synthetic_issues(num_issues=count)}
