@@ -3,6 +3,7 @@
 from fastapi import FastAPI
 from synthetic_data import generate_synthetic_messages
 from github_issues import generate_synthetic_issues
+from code_snippets import generate_code_snippets
 
 app = FastAPI(title="ContextIQ Backend API")
 
@@ -40,3 +41,14 @@ def get_github_issues(count: int = 5):
     - count: number of issues to generate (default 5)
     """
     return {"issues": generate_synthetic_issues(num_issues=count)}
+
+@app.get("/synthetic/code-snippets")
+def get_code_snippets(count: int = 5):
+    """
+    Generate and return synthetic code snippets.
+    
+    Query parameter:
+    - count: number of code snippets to generate (default 5)
+    """
+    snippets = generate_code_snippets(num_snippets=count)
+    return {"snippets": snippets}
