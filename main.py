@@ -1,11 +1,17 @@
 # FastAPI entrypoint with comments and synthetic data API
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
 from synthetic_data.messages import generate_synthetic_messages
 from synthetic_data.github_issues import generate_synthetic_github_issues
 from synthetic_data.code_snippets import generate_synthetic_code_snippets
 from synthetic_data.doc_summary import generate_synthetic_doc_summary
 from synthetic_data.tasks import generate_synthetic_tasks
+
+from db.deps import get_db
+from sqlalchemy.ext.asyncio import AsyncSession
+from db.crud import create_message, get_messages
+from db.schemas import MessageCreate, MessageRead
+from typing import List
 
 app = FastAPI(title="ContextIQ Backend API")
 
@@ -36,3 +42,11 @@ def get_doc_summary(count: int = 5):
 @app.get("/synthetic/tasks")
 def get_synthetic_tasks(count: int = 5):
     return {"tasks": generate_synthetic_tasks(num_tasks=count)}
+
+@app.post("/messages", response_model=MessageRead)
+async def post_message(message: MessageCreate, db: AsyncSession = Depends(get_db)):
+    return await create_message(db, message)
+
+@app.get("/messages", response_model=List[MessageRead])
+async def list_messages(limit: int = 10, db: AsyncSession = Depends(get_db)):
+    return await get_messages(db, limit=limit)
