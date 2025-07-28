@@ -3,3 +3,6 @@
 fastapi
 uvicorn
 faker
+pytest
+httpx
+pytest-asyncio

@@ -15,3 +15,15 @@ class MessageRead(BaseModel):
 
     class Config:
         orm_mode = True
+
+class GitHubIssueCreate(BaseModel):
+    title: str
+    description: Optional[str] = None
+    user: str
+    created_at: Optional[datetime] = None
+
+class GitHubIssueRead(GitHubIssueCreate):
+    id: int
+
+    class Config:
+        orm_mode = True
